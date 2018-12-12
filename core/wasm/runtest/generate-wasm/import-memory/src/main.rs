@@ -43,7 +43,7 @@ fn externalize_mem(
 }
 
 fn main() {
-    let wasm_binary = fs::read("../to_wasm.wasm").expect("Unable to read file");
+    let wasm_binary = fs::read("../../res/main.wasm").expect("Unable to read file");
 
     // Load wasm binary and prepare it for instantiation.
     let elements_module = parity_wasm::elements::deserialize_buffer(wasm_binary.as_ref())
@@ -51,6 +51,6 @@ fn main() {
 
     let module_with_mem = externalize_mem(elements_module, None, 16);
 
-    parity_wasm::elements::serialize_to_file("../../res/wasm_with_mem.wasm", module_with_mem)
+    parity_wasm::elements::serialize_to_file("../../res/main_mem.wasm", module_with_mem)
         .expect("Can't write the file")
 }

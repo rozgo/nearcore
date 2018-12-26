@@ -3,14 +3,14 @@ use std::sync::Arc;
 use std::str;
 
 use primitives::hash::{CryptoHash, hash};
-use primitives::types::{AccountId, Balance, MerkleHash};
+use primitives::types::{AccountId, Balance, MerkleHash, AccountingInfo};
 use shard::ShardBlockChain;
 use storage::{StateDb, StateDbUpdate};
 use wasm::executor;
 use wasm::types::{ReturnData, RuntimeContext};
 
 use super::{
-    Account, account_id_to_bytes, get, RUNTIME_DATA, RuntimeData, RuntimeExt,
+    Account, account_id_to_bytes, get, RUNTIME_DATA, RuntimeData, RuntimeExt
 };
 
 #[derive(Serialize, Deserialize)]
@@ -105,6 +105,10 @@ impl StateDbViewer {
                 let mut runtime_ext = RuntimeExt::new(
                     &mut state_update,
                     contract_id,
+                    AccountingInfo {
+                        originator: originator_id,
+                        contract_id: Some(contract_id),
+                    },
                     &[],
                 );
                 let wasm_res = executor::execute(
